@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# get dirName of BASH_SOURCE
+# cd the result
+# && pwd -> defining script_dir
+script_dir="$( cd "$( dirName "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" 
+
+if [ -z "$DEV_ENV" ]; then
+	echo "env var DEV_ENV needs to be present"
+	exit 1
+fi
+
+export DEV_ENV="$DEV_ENV"
+
+grep=""
+dry_run="0"
+
+# while the exit code of the last command was 0
+while [[ $# -gt 0 ]]; do
+	echo "ARG: \"$1\""
+	if [[ "$1" == "--dry" ]]; then
+		dry_run="1"
+	else
+		# set grep to input
+		grep="$1"
+	fi
+	shift
+done
+
+log() {
+	if [[ $dry_run == "1" ]]; then
+		echo "[DRY_RUN]: $1"
+	else
+		echo "$1"
+	fi
+)
+
+log "RUN: env $env -- grep: $grep"
+
+# Find executable files in the runs directory
+runs_dir=`find $script_dir/runs -mindepth 1 -maxdepth 1 -executable`
+
+# for each executable
+for s in $runs_dir; do
+	# filter our files that match grep of ARG
+	if echo "$s" | grep -vq "$grep"; then
+		log "grep \"$grep\" filtered out $s"
+		continue
+	fi
+
+	log "running script: $s"
+
+	# if not dry_run; execute
+	if [[ $dry_run == "0" ]]; then
+		$s
+	fi
+done
+
+# TODO more from https://github.com/ThePrimeagen/dev/blob/master/run
