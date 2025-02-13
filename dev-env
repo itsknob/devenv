@@ -4,7 +4,7 @@ dry_run="0"
 
 if [ -z "$XDG_CONFIG_HOME" ]; then
 	echo "no xdg config home"
-	echo "using ~/.config"
+	echo "using ~/.config as XDG_CONFIG_HOME"
 	XDG_CONFIG_HOME=$HOME/.config
 fi
 
@@ -26,7 +26,7 @@ log() {
 	fi
 }
 
-log "env: $DEV_ENV"
+log "----------- $DEV_ENV -----------"
 
 update_files() {
 	log "copying over files from: $1"
@@ -70,6 +70,21 @@ copy() {
 	fi
 }
 
+copy_dir() {
+    from=$1
+    to=$2
+
+    # | are put stdout and put it into next stdin
+    # > are redirects
+    pushd $from > /dev/null # Redirect to /dev/null
+    dirs=$(find . -mindepth 1 -maxdepth 1 -type d)
+    for dir in $dirs; do
+        execute "rm -rf $to/$dir" # remove existing file at destination
+        cp -r $dir $to/$dir # copy everything in dir to destination
+    done
+    popd
+}
+
 # Update config directory
 update_files $DEV_ENV/env/.config $XDG_CONFIG_HOME
 # Update .local directory
@@ -78,3 +93,6 @@ update_files $DEV_ENV/env/.local $HOME/.local
 # Copy Individual Files
 copy $DEV_ENV/env/.zshrc $HOME/.zshrc
 copy $DEV_ENV/dev-env $HOME/.local/scripts/dev-env # this script
+
+# Copy Directories
+copy_dir .config $XDG_CONFIG_HOME
