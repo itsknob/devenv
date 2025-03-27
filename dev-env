@@ -2,12 +2,17 @@
 
 dry_run="0"
 
+# Where the config is going to be installed TO
 if [ -z "$XDG_CONFIG_HOME" ]; then
 	echo "no xdg config home"
 	echo "using ~/.config as XDG_CONFIG_HOME"
 	XDG_CONFIG_HOME=$HOME/.config
 fi
 
+# Where the config should be installed FROM
+# At this point it should point to the root of this repo
+# ~/code/devenv 
+# no trailing slash
 if [ -z "$DEV_ENV" ]; then
 	echo "env var DEV_ENV needs to be present"
 	exit 1
@@ -29,7 +34,9 @@ log() {
 log "----------- $DEV_ENV -----------"
 
 update_files() {
-	log "copying over files from: $1"
+    log "Updating Files"
+	log "  source:    $1"
+    log "  dest:      $2"
 	# change to given directory
 	pushd $1 &> /dev/null
 	(
@@ -40,13 +47,16 @@ update_files() {
 			directory=${2%/}/${c#./}
 
 			# Remove old Directory
-			log "   removing: rm -rf $directory"
+            log "  Removing Old Dir (found)"
+            log "    target:  $directory"
 			if [[ $dry_run == "0" ]]; then
 				rm -rf $directory
 			fi
 
 			# Copy new one over to old place
-			log "   copying env: cp $c $2"
+			log "  Copying Directory"
+            log "    source: $1"
+            log "    dest:   $2"
 			if [[ $dry_run == "0" ]]; then
 				cp -r ./$c $2
 			fi
@@ -57,6 +67,7 @@ update_files() {
 }
 
 copy() {
+    log "copy $1 $2"
 	# Remove Old
 	log "removing: $2"
 	if [[ $dry_run == "0" ]]; then

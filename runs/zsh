@@ -1,7 +1,7 @@
 # TODO: Add checks to ignore if already installed
 
 # Install zsh
-apt install zsh
+sudo apt install zsh
 
 # Set as default shell
 sudo chsh -s $(which zsh)

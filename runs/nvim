@@ -5,6 +5,7 @@ version="v0.10.4"
 if [ ! -z "$NVIM_VERSION" ]; then
 	version="$NVIM_VERSION"
 fi
+
 echo "Installing NeoVim version: \"$version\""
 
 if [ ! -d $HOME/personal/neovim ]; then
@@ -20,3 +21,4 @@ make -C ~/neovim clean
 make -C ~/neovim CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make -C ~/neovim install
 echo "Done installing NeoVim"
+
