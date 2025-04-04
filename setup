@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+dry_run="0"
+
+# Where the config is going to be installed TO
+if [ -z "$XDG_CONFIG_HOME" ]; then
+	echo "no xdg config home"
+	echo "using ~/.config as XDG_CONFIG_HOME"
+	XDG_CONFIG_HOME=$HOME/.config
+fi
+
+# Where the config should be installed FROM
+# At this point it should point to the root of this repo
+# ~/code/devenv 
+# no trailing slash
+if [ -z "$DEV_ENV" ]; then
+	echo "env var DEV_ENV needs to be present"
+    echo "export DEV_ENV=<path/to/source/dir (from directory)"
+	exit 1
+fi
+
+# if [[ $1 == "--dry" ]]; then
+	echo "[[ DRY RUN ]]"
+	dry_run="1"
+# fi
+
+log() {
+	if [[ $dry_run == "1" ]]; then
+		echo "[DRY_RUN]: $1"
+	else
+		echo "$1"
+	fi
+}
+
+log "----------- $DEV_ENV -----------"
+
+## Copy Configs
+# Find all directories under DEV_ENV
+# For each directory
+#   Get the path to an existing dir of that name under $XDG_CONFIG_HOME
+#   Remove the existing directory (destination)
+#   Copy the directory from DEV_ENV to the destination
+
+# Do this for .config dir
+# Do this for .local dir
+
+## Copy Individual Files
+# Remove existing file
+# Copy file in DEV_ENV to $XDG_CONFIG_HOME
+
+# Do this for .zshrc
+# Do this for this script
+
+## Copy Directories
+# Find all dirs in DEV_ENV
+# For each directory
+#   Remove existing directory from $XDG_CONFIG_HOME
+#   Copy DEV_ENV to $XDG_CONFIG_HOME
+
+# Do this for .config directory
+
+### Run Script
+# Get executables from the runs directory
+# Filter out items passed via grep
+# Run the script
+# E.g. ready-tmux
