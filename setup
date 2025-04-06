@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dry_run="0"
+dry_run="1"
 
 # Where the config is going to be installed TO
 if [ -z "$XDG_CONFIG_HOME" ]; then
@@ -40,6 +40,50 @@ log "----------- $DEV_ENV -----------"
 #   Get the path to an existing dir of that name under $XDG_CONFIG_HOME
 #   Remove the existing directory (destination)
 #   Copy the directory from DEV_ENV to the destination
+
+# Params: from, to
+copy_configs() {
+    from=$1
+    to=$2
+
+    log "Copying Configs"
+	log "  from:    $from"
+    log "  to:      $to"
+    
+	# change to "from" directory
+	pushd $1 &> /dev/null
+	(
+		# find directories in the $1 path
+		configDirs=`find . -mindepth 1 -maxdepth 1 -type d`
+		for configDir in $configDirs; do
+            # Clean up path
+            configDir=$(basename $configDir)
+
+			# Bash Wizardry for "to" path
+			destinationDir=${2%/}/${configDir#}
+
+			# Remove old Directory
+            log "  Removing Old Dir (from)"
+            log "    existing (potentially):  $destinationDir"
+			if [[ $dry_run == "0" ]]; then
+				rm -rf $destinationDir
+			fi
+
+			# Copy contents of "from" into destination
+            log "  Copying Directory (to)"
+            log "    from: $1/$configDir"
+            log "    to:   $destinationDir"
+			if [[ $dry_run == "0" ]]; then
+				cp -r ./$configDir $destinationDir
+			fi
+            ls -la $destinationDir
+		done
+	)
+	# return to previous directory
+	popd &> /dev/null
+}
+echo "Copy Configs .local to "
+copy_configs $DEV_ENV/env $XDG_CONFIG_HOME
 
 # Do this for .config dir
 # Do this for .local dir
