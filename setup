@@ -19,10 +19,10 @@ if [ -z "$DEV_ENV" ]; then
 	exit 1
 fi
 
-# if [[ $1 == "--dry" ]]; then
-	echo "[[ DRY RUN ]]"
-	dry_run="1"
-# fi
+if [[ $1 == "--real" ]]; then
+	echo "[[ REAL RUN ]]"
+	dry_run="0"
+fi
 
 log() {
 	if [[ $dry_run == "1" ]]; then
@@ -74,7 +74,7 @@ copy_configs() {
             log "    from: $1/$configDir"
             log "    to:   $destinationDir"
 			if [[ $dry_run == "0" ]]; then
-				cp -r ./$configDir $destinationDir
+				cp -R ./$configDir $destinationDir/
 			fi
             ls -la $destinationDir
 		done
