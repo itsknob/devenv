@@ -83,8 +83,16 @@ copy_configs() {
 	popd &> /dev/null
 }
 echo "Copy Configs .local to "
-copy_configs $DEV_ENV/env $XDG_CONFIG_HOME
+# copy_configs $DEV_ENV/env $XDG_CONFIG_HOME
 
+## Should we run stow in here?
+log "Running Stow"
+if [[ $dry_run == "0" ]]; then
+    log "  stow disabled"
+else
+    echo "DevEnv: $DEV_ENV"
+    stow -nv -d env/ *
+fi
 # Do this for .config dir
 # Do this for .local dir
 
