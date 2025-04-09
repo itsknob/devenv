@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
+# Utils
+# - git
+# - ripgrep
+# - jq
+
 # Fuzzy Finder - FZF
 sudo apt -y update
 sudo apt -y install git ripgrep jq tldr python3-pip
 
-git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf
-$HOME/personal/fzf/install
-
+which fzf
+if [[ $? == 0 ]]; then
+    git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf
+    $HOME/personal/fzf/install
+fi
 
 

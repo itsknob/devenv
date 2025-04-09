@@ -4,35 +4,42 @@ dry_run="1"
 
 # Where the config is going to be installed TO
 if [ -z "$XDG_CONFIG_HOME" ]; then
-	echo "no xdg config home"
-	echo "using ~/.config as XDG_CONFIG_HOME"
-	XDG_CONFIG_HOME=$HOME/.config
+    echo "no xdg config home"
+    echo "using ~/.config as XDG_CONFIG_HOME"
+    XDG_CONFIG_HOME=$HOME/.config
 fi
 
 # Where the config should be installed FROM
 # At this point it should point to the root of this repo
-# ~/code/devenv 
+# ~/code/devenv
 # no trailing slash
 if [ -z "$DEV_ENV" ]; then
-	echo "env var DEV_ENV needs to be present"
+    echo "env var DEV_ENV needs to be present"
     echo "export DEV_ENV=<path/to/source/dir (from directory)"
-	exit 1
+    exit 1
 fi
 
 if [[ $1 == "--real" ]]; then
-	echo "[[ REAL RUN ]]"
-	dry_run="0"
+    echo "[[ REAL RUN ]]"
+    dry_run="0"
 fi
 
 log() {
-	if [[ $dry_run == "1" ]]; then
-		echo "[DRY_RUN]: $1"
-	else
-		echo "$1"
-	fi
+    if [[ $dry_run == "1" ]]; then
+        echo "[DRY_RUN]: $1"
+    else
+        echo "$1"
+    fi
 }
 
 log "----------- $DEV_ENV -----------"
+
+# ensure dev-env script is in $HOME/personal
+if [[ $dry_run == "0" ]]; then
+    cp ./dev-env ~/personal
+else
+    log "Copying dev-env script to ~/personal"
+fi
 
 ## Copy Configs
 # Find all directories under DEV_ENV
@@ -47,52 +54,78 @@ copy_configs() {
     to=$2
 
     log "Copying Configs"
-	log "  from:    $from"
+    log "  from:    $from"
     log "  to:      $to"
-    
-	# change to "from" directory
-	pushd $1 &> /dev/null
-	(
-		# find directories in the $1 path
-		configDirs=`find . -mindepth 1 -maxdepth 1 -type d`
-		for configDir in $configDirs; do
+
+    # change to "from" directory
+    pushd $1 &> /dev/null
+    (
+        # find directories in the $1 path
+        configDirs=`find . -mindepth 1 -maxdepth 1 -type d`
+        for configDir in $configDirs; do
             # Clean up path
             configDir=$(basename $configDir)
 
-			# Bash Wizardry for "to" path
-			destinationDir=${2%/}/${configDir#}
+            # Bash Wizardry for "to" path
+            destinationDir=${2%/}/${configDir#}
 
-			# Remove old Directory
+            # Remove old Directory
             log "  Removing Old Dir (from)"
             log "    existing (potentially):  $destinationDir"
-			if [[ $dry_run == "0" ]]; then
-				rm -rf $destinationDir
-			fi
+            if [[ $dry_run == "0" ]]; then
+                rm -rf $destinationDir
+            fi
 
-			# Copy contents of "from" into destination
+            # Copy contents of "from" into destination
             log "  Copying Directory (to)"
             log "    from: $1/$configDir"
             log "    to:   $destinationDir"
-			if [[ $dry_run == "0" ]]; then
-				cp -R ./$configDir $destinationDir/
-			fi
+            if [[ $dry_run == "0" ]]; then
+                cp -R ./$configDir $destinationDir/
+            fi
             ls -la $destinationDir
-		done
-	)
-	# return to previous directory
-	popd &> /dev/null
+        done
+    )
+    # return to previous directory
+    popd &> /dev/null
 }
-echo "Copy Configs .local to "
+echo "Copy Configs $DEV_ENV/env to $XDG_CONFIG_HOME"
 # copy_configs $DEV_ENV/env $XDG_CONFIG_HOME
 
+## Ensure Stow is installed?
+log "Checking for stow"
+which stow &>/dev/null
+if [[ $? == 1 ]]; then
+    log "stow not found - installing"
+
+    if [[ $dry_run == "0" ]]; then
+        log "  running: sudo apt install stow -y"
+    else
+        sudo apt install stow -y
+    fi
+else
+    log "Found stow"
+fi
 ## Should we run stow in here?
-log "Running Stow"
+log "Running stow"
 if [[ $dry_run == "0" ]]; then
     log "  stow disabled"
+    # stow -d $DEV_ENV/env \
+        #     -t $XDG_CONFIG_HOME \
+        #     .local \
+        #     nvim \
+        #     tmux \
+        #     zsh
 else
-    echo "DevEnv: $DEV_ENV"
-    stow -nv -d env/ *
+    stow -nv \
+        -d $DEV_ENV/env \
+        -t $XDG_CONFIG_HOME \
+        .local \
+        nvim \
+        tmux \
+        zsh
 fi
+
 # Do this for .config dir
 # Do this for .local dir
 

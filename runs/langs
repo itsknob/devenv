@@ -3,3 +3,10 @@
 # Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
+# Node Version Manager
+(release=$(curl -L https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq .name)
+nvm_release_url=https://raw.githubusercontent.com/nvm-sh/nvm/$release/install.sh
+echo "Latest nvm: $release"
+echo "Using URL: $nvm_release_url"
+
+curl -o- $nvm_release_url | bash
