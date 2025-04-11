@@ -44,14 +44,17 @@ update_files() {
 		configs=`find . -mindepth 1 -maxdepth 1 -type d`
 		for c in $configs; do
 			# Bash Wizardry for found path
-			directory=${2%/}/${c#./}
-
-			# Remove old Directory
-            log "  Removing Old Dir (found)"
-            log "    target:  $directory"
-			if [[ $dry_run == "0" ]]; then
-				rm -rf $directory
-			fi
+			destination=${2%/}/${c#./}
+            
+            # If destionation is a directory delete it.
+            if [[ -d $destination ]]; then
+                # Remove old Directory
+                log "  Removing Old Dir (found)"
+                log "    target:  $destination"
+                if [[ $dry_run == "0" ]]; then
+                    rm -rf $destination
+                fi
+            fi
 
 			# Copy new one over to old place
 			log "  Copying Directory"
@@ -90,7 +93,9 @@ copy_dir() {
     pushd $from > /dev/null # Redirect to /dev/null
     dirs=$(find . -mindepth 1 -maxdepth 1 -type d)
     for dir in $dirs; do
-        execute "rm -rf $to/$dir" # remove existing file at destination
+        if [[ -d $to/dir ]]; then
+            exec "rm -rf $to/$dir" # remove existing file at destination
+        fi
         cp -r $dir $to/$dir # copy everything in dir to destination
     done
     popd
@@ -106,4 +111,4 @@ copy $DEV_ENV/env/.zshrc $HOME/.zshrc
 copy $DEV_ENV/dev-env $HOME/.local/scripts/dev-env # this script
 
 # Copy Directories
-copy_dir .config $XDG_CONFIG_HOME
+# copy_dir $DEV_ENV/env/.config $XDG_CONFIG_HOME
