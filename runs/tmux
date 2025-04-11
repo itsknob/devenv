@@ -1,3 +1,16 @@
 #!/usr/bin/env bash
+# 1 is DRY 0 is WET
+dry_run=${dry_run:-"1"}
 
-sudo apt install tmux
+log "////////////////"
+log "//// tmux"
+log "///////////"
+log "// Installing tmux "
+log ""
+
+
+if [[ $dry_run == "0" ]]; then
+    sudo apt install tmux
+else
+    log "sudo apt install tmux"
+fi

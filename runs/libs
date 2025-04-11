@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# 1 is DRY 0 is WET
+dry_run=${dry_run:-"1"}
+
+log "////////////////"
+log "//// Libs"
+log "///////////"
+log "// Installing CLI Tools and Libraries"
+log ""
 
 # Utils
 # - git
@@ -6,13 +14,30 @@
 # - jq
 
 # Fuzzy Finder - FZF
-sudo apt -y update
-sudo apt -y install git ripgrep jq tldr python3-pip
-
-which fzf
-if [[ $? == 0 ]]; then
-    git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf
-    $HOME/personal/fzf/install
+log "Updating Apt"
+log "Installing CLI Tools"
+if [[ $dry_run == "0" ]]; then
+    sudo apt -y update
+    sudo apt -y install git ripgrep jq tldr python3-pip
+else
+    log "sudo apt -y update"
+    log "sudo apt -y install git ripgrep jq tldr python3-pip"
 fi
 
+log "Installing fzf"
+if [[ $dry_run == "0" ]]; then
+    if ! has fzf; then
+        git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf
+        $HOME/personal/fzf/install
+    else
+        log "fzf is already installed"
+    fi
+else
+    if ! hash fzf 2>/dev/null; then
+        log "git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf"
+        log "$HOME/personal/fzf/install"
+    else
+        log "fzf is already installed"
+    fi
+fi
 

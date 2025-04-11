@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+# TODO: change to boolean for crying out loud; maybe make the variable name mean something?
 # 1 is Dry, 0 is Wet
-dry_run="1"
+export dry_run="1"
 
 # Where the config is going to be installed TO
 if [ -z "$XDG_CONFIG_HOME" ]; then
@@ -32,6 +33,7 @@ log() {
         echo "$1"
     fi
 }
+export -f log
 
 log "//////////////////"
 log "//// Setup"
@@ -79,13 +81,13 @@ else
         nvim \
         tmux \
         zsh \
-        --ignore .git 
+        --ignore .git
 fi
 
 if [[ $dry_run == "0" ]]; then
     log "  running ./run --real is disabled"
     # ./run --real
 else
-    ./run 
+    ./run
 fi
 

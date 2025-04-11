@@ -1,12 +1,29 @@
+#!/usr/bin/env bash
+
 # TODO: Add checks to ignore if already installed
+# 1 is DRY 0 is WET
+dry_run=${dry_run:-"1"}
 
-# Install zsh
-sudo apt install zsh
+log "////////////////"
+log "//// Zsh"
+log "///////////"
+log "// Installing zsh and setting as default sh"
+log ""
 
-# Set as default shell
-sudo chsh -s $(which zsh)
+if [[ $dry_run == "0" ]]; then
+    # Install zsh
+    sudo apt install zsh
 
-# Install Oh-My-Zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    # Set as default shell
+    sudo chsh -s $(which zsh)
+
+    # Install Oh-My-Zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+else
+    log "sudo apt install zsh"
+    log "sudo chsh -s $(which zsh)"
+    log 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+fi
 
 

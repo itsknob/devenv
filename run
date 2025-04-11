@@ -3,38 +3,39 @@
 # get dirName of BASH_SOURCE
 # cd the result
 # && pwd -> defining script_dir
-script_dir="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd )" 
+script_dir="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd )"
 
 if [ -z "$DEV_ENV" ]; then
-	echo "env var DEV_ENV needs to be present"
-	exit 1
+    >&2 echo "env var DEV_ENV needs to be present"
+    exit 1
 fi
 
 export DEV_ENV="$DEV_ENV"
 
 grep=""
 # 1 is DRY 0 is WET
-dry_run="1"
+dry_run=${dry_run:-"1"}
 
 # while the number of arguments is greater than 0
 while [[ $# -gt 0 ]]; do
-	echo "ARG: \"$1\""
-	if [[ "$1" == "--real" ]]; then
-		dry_run="0"
-	else
-		# set grep to input
-		grep="$1"
-	fi
-	shift # shift the arguments
+    >&2 echo "ARG: \"$1\""
+    if [[ "$1" == "--real" ]]; then
+        dry_run="0"
+    else
+        # set grep to input
+        grep="$1"
+    fi
+    shift # shift the arguments
 done
 
 log() {
-	if [[ $dry_run == "1" ]]; then
-		echo "[DRY_RUN]: $@" # Print out everything passed in
-	else
-		echo "$@"
-	fi
+    if [[ $dry_run == "1" ]]; then
+        echo "[DRY_RUN]: $@" # Print out everything passed in
+    else
+        echo "$@"
+    fi
 }
+export -f log
 
 log "////////////////"
 log "//// Runs"
@@ -52,18 +53,18 @@ for dir in $runs_dir; do
 done
 # for each executable
 for s in $runs_dir; do
-	# filter our files that match grep of ARG
-	if echo "$s" | grep -vq "$grep"; then
-		log "grep \"$grep\" filtered out $s"
-		continue
-	fi
+    # filter our files that match grep of ARG
+    if echo "$s" | grep -vq "$grep"; then
+        log "grep \"$grep\" filtered out $s"
+        continue
+    fi
 
-	log "running script: $s"
+    log "running script: $s"
 
-	# if not dry_run; execute
-	if [[ $dry_run == "0" ]]; then
-		$s
-	fi
+    # if not dry_run; execute
+    # if [[ $dry_run == "0" ]]; then
+    $s
+    # fi
 done
 
 # TODO more from https://github.com/ThePrimeagen/dev/blob/master/run
