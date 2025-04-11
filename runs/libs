@@ -5,8 +5,16 @@ dry_run=${dry_run:-"1"}
 log "////////////////"
 log "//// Libs"
 log "///////////"
+<<<<<<< HEAD
+<<<<<<< HEAD
 log "// Installing CLI Tools and Libraries"
 log ""
+=======
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+log "// Installing CLI Tools and Libraries"
+log ""
+>>>>>>> 7337865 (chore: clean up logging)
 
 # Utils
 # - git
@@ -14,6 +22,8 @@ log ""
 # - jq
 
 # Fuzzy Finder - FZF
+<<<<<<< HEAD
+<<<<<<< HEAD
 log "Updating Apt"
 log "Installing CLI Tools"
 if [[ $dry_run == "0" ]]; then
@@ -22,11 +32,30 @@ if [[ $dry_run == "0" ]]; then
 else
     log "sudo apt -y update"
     log "sudo apt -y install git ripgrep jq tldr python3-pip"
+=======
+=======
+log "Updating Apt"
+>>>>>>> 7337865 (chore: clean up logging)
+log "Installing CLI Tools"
+if [[ $dry_run == "0" ]]; then
+    sudo apt -y update
+    sudo apt -y install git ripgrep jq tldr python3-pip
+else
+<<<<<<< HEAD
+    log "    sudo apt -y update"
+    log "    sudo apt -y install git ripgrep jq tldr python3-pip"
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+    log "sudo apt -y update"
+    log "sudo apt -y install git ripgrep jq tldr python3-pip"
+>>>>>>> 7337865 (chore: clean up logging)
 fi
 
 log "Installing fzf"
 if [[ $dry_run == "0" ]]; then
     if ! has fzf; then
+<<<<<<< HEAD
+<<<<<<< HEAD
         git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf
         $HOME/personal/fzf/install
     else
@@ -38,6 +67,29 @@ else
         log "$HOME/personal/fzf/install"
     else
         log "fzf is already installed"
+=======
+        log "  Cloning repo"
+        git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf 2>/dev/null
+        log "  Running install script"
+        $HOME/personal/fzf/install --all
+=======
+        git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf
+        $HOME/personal/fzf/install
+>>>>>>> 7337865 (chore: clean up logging)
+    else
+        log "fzf is already installed"
+    fi
+else
+    if ! hash fzf 2>/dev/null; then
+        log "git clone git@github.com:junegunn/fzf.git $HOME/personal/fzf"
+        log "$HOME/personal/fzf/install"
+    else
+<<<<<<< HEAD
+        log "  fzf is already installed"
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+        log "fzf is already installed"
+>>>>>>> 7337865 (chore: clean up logging)
     fi
 fi
 

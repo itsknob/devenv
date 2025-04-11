@@ -2,8 +2,16 @@
 log "////////////////"
 log "//// Langs"
 log "///////////"
+<<<<<<< HEAD
+<<<<<<< HEAD
 log "// Installing Language Managers"
 log ""
+=======
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+log "// Installing Language Managers"
+log ""
+>>>>>>> 7337865 (chore: clean up logging)
 
 # 1 is DRY 0 is WET
 dry_run=${dry_run:-"1"}
@@ -28,7 +36,15 @@ fi
 log "Installing Node Version Manager"
 if [[ $dry_run == "0" ]]; then
     if ! hash nvm 2>/dev/null; then
+<<<<<<< HEAD
+<<<<<<< HEAD
         release=$(curl -L https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq .name)
+=======
+        release=$(curl -L https://api.github.com/repos/nvm-sh/nvm/releases/latest 2>/dev/null | jq .name | tr -d '"')
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+        release=$(curl -L https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq .name)
+>>>>>>> 7337865 (chore: clean up logging)
         nvm_release_url=https://raw.githubusercontent.com/nvm-sh/nvm/$release/install.sh
         log "  Latest nvm: $release"
         log "  Using URL: $nvm_release_url"
@@ -37,8 +53,18 @@ if [[ $dry_run == "0" ]]; then
         log "NVM already installed"
     fi
 else
+<<<<<<< HEAD
+<<<<<<< HEAD
     if ! hash nvm; then
         release=$(curl -L https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq .name)
+=======
+    if ! hash nvm 2>/dev/null; then
+        release=$(curl -L https://api.github.com/repos/nvm-sh/nvm/releases/latest 2>/dev/null | jq .name | tr -d '"')
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+    if ! hash nvm; then
+        release=$(curl -L https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq .name)
+>>>>>>> 7337865 (chore: clean up logging)
         nvm_release_url=https://raw.githubusercontent.com/nvm-sh/nvm/$release/install.sh
         log "Latest nvm: $release"
         log "Using URL: $nvm_release_url"
@@ -47,3 +73,10 @@ else
         log "NVM already installed"
     fi
 fi
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+>>>>>>> 7337865 (chore: clean up logging)

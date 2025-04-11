@@ -55,6 +55,8 @@ done
 for s in $runs_dir; do
     # filter our files that match grep of ARG
     if echo "$s" | grep -vq "$grep"; then
+<<<<<<< HEAD
+<<<<<<< HEAD
         log "grep \"$grep\" filtered out $s"
         continue
     fi
@@ -64,6 +66,25 @@ for s in $runs_dir; do
     # if not dry_run; execute
     # if [[ $dry_run == "0" ]]; then
     $s
+=======
+        log "  grep \"$grep\" filtered out $s"
+=======
+        log "grep \"$grep\" filtered out $s"
+>>>>>>> 7337865 (chore: clean up logging)
+        continue
+    fi
+
+    log "running script: $s"
+
+    # if not dry_run; execute
+    # if [[ $dry_run == "0" ]]; then
+    $s
+<<<<<<< HEAD
+    log ""
+    log ""
+>>>>>>> e0487ba (feat: add dry_run guards to runs executables)
+=======
+>>>>>>> 7337865 (chore: clean up logging)
     # fi
 done
 
