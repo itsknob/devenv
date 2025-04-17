@@ -5,17 +5,6 @@ dry_run=${dry_run:-"1"}
 log "////////////////"
 log "//// tmux"
 log "///////////"
-<<<<<<< HEAD
-<<<<<<< HEAD
-log "// Installing tmux "
-log ""
-=======
->>>>>>> e0487ba (feat: add dry_run guards to runs executables)
-=======
-log "// Installing tmux "
-log ""
->>>>>>> 7337865 (chore: clean up logging)
-
 
 if [[ $dry_run == "0" ]]; then
     sudo apt install tmux

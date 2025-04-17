@@ -5,57 +5,29 @@
 dry_run=${dry_run:-"1"}
 
 log "////////////////"
-log "//// Zsh"
+log "//// zsh"
 log "///////////"
-<<<<<<< HEAD
-<<<<<<< HEAD
-log "// Installing zsh and setting as default sh"
-log ""
 
 if [[ $dry_run == "0" ]]; then
     # Install zsh
+    log "Installing zsh"
     sudo apt install zsh
 
     # Set as default shell
+    log "Setting as default shell"
     sudo chsh -s $(which zsh)
 
     # Install Oh-My-Zsh
+    log "Installing oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 else
-    log "sudo apt install zsh"
-    log "sudo chsh -s $(which zsh)"
-    log 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-=======
-=======
-log "// Installing zsh and setting as default sh"
-log ""
->>>>>>> 7337865 (chore: clean up logging)
-
-if [[ $dry_run == "0" ]]; then
-    # Install zsh
-    sudo apt install zsh
-
-    # Set as default shell
-    sudo chsh -s $(which zsh)
-
-    # Install Oh-My-Zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-else
-<<<<<<< HEAD
     log "Installing zsh"
     log "  sudo apt install zsh"
     log "Setting as default shell"
     log "  sudo chsh -s $(which zsh)"
     log "Installing oh-my-zsh"
     log '  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
->>>>>>> e0487ba (feat: add dry_run guards to runs executables)
-=======
-    log "sudo apt install zsh"
-    log "sudo chsh -s $(which zsh)"
-    log 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
->>>>>>> 7337865 (chore: clean up logging)
 fi
 
 

@@ -10,33 +10,14 @@ if [ ! -z "$NVIM_VERSION" ]; then
 fi
 
 log "////////////////"
-<<<<<<< HEAD
-<<<<<<< HEAD
-log "//// nvim"
-log "///////////"
-log "// Installing NeoVim $version"
-log ""
-
-if hash nvim; then
-    log "NeoVim already installed"
-=======
 log "//// nvim - $version"
-=======
-log "//// nvim"
->>>>>>> 7337865 (chore: clean up logging)
 log "///////////"
-log "// Installing NeoVim $version"
-log ""
 
 if hash nvim; then
-<<<<<<< HEAD
     log "  NeoVim already installed"
->>>>>>> e0487ba (feat: add dry_run guards to runs executables)
-=======
-    log "NeoVim already installed"
->>>>>>> 7337865 (chore: clean up logging)
     exit 0 
 fi
+
 if [[ $dry_run == "0" ]]; then
     if [ ! -d $HOME/personal/neovim ]; then
         git clone https://github.com/neovim/neovim.git $HOME/personal/neovim
@@ -51,27 +32,12 @@ if [[ $dry_run == "0" ]]; then
 else
     if [ -d $HOME/personal/neovim ]; then
         log "  git clone https://github.com/neovim/neovim.git $HOME/personal/neovim"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 7337865 (chore: clean up logging)
-        log "sudo apt -y install cmake gettext luda5.1 liblua5.1.0-dev"
-        log "git -C ~/neovim fetch --all"
-        log "git -C ~/neovim checkout $version"
-        log "make -C ~/neovim clean"
-        log "make -C ~/neovim CMAKE_BUILD_TYPE=RelWithDebInfo"
-        log "sudo make -C ~/neovim install"
-<<<<<<< HEAD
-=======
         log "  sudo apt -y install cmake gettext luda5.1 liblua5.1.0-dev"
         log "  git -C ~/neovim fetch --all"
         log "  git -C ~/neovim checkout $version"
         log "  make -C ~/neovim clean"
         log "  make -C ~/neovim CMAKE_BUILD_TYPE=RelWithDebInfo"
         log "  sudo make -C ~/neovim install"
->>>>>>> e0487ba (feat: add dry_run guards to runs executables)
-=======
->>>>>>> 7337865 (chore: clean up logging)
 fi
 
 log "Done installing NeoVim"
