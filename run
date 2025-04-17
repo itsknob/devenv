@@ -14,7 +14,7 @@ export DEV_ENV="$DEV_ENV"
 
 grep=""
 # 1 is DRY 0 is WET
-dry_run=${dry_run:-"1"}
+dry_run="1"
 
 # while the number of arguments is greater than 0
 while [[ $# -gt 0 ]]; do
@@ -38,12 +38,8 @@ log() {
 export -f log
 
 log "////////////////"
-log "//// Runs"
+log "//// runs"
 log "///////////"
-log "// Installing required tools"
-log ""
-
-log "RUN: env $env -- grep: $grep"
 
 # Find executable files in the runs directory
 runs_dir=`find $script_dir/runs -mindepth 1 -maxdepth 1 -executable`

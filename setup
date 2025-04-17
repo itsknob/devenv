@@ -38,14 +38,14 @@ export -f log
 log "//////////////////"
 log "//// Setup"
 log "/////////////"
-log "// Moving dotfiles"
-log "----------- $DEV_ENV -----------"
 
 # ensure dev-env script is in $HOME/personal
 if [[ $dry_run == "0" ]]; then
     cp ./dev-env ~/personal
+    cp ./run ~/personal
+    cp ./setup ~/personal
 else
-    log "Copying dev-env script to ~/personal"
+    log "Copying dev-env, run, and setup scripts to ~/personal"
 fi
 
 ## Ensure Stow is installed?
@@ -65,28 +65,30 @@ fi
 ## Should we run stow in here?
 log "  Running stow"
 if [[ $dry_run == "0" ]]; then
-    log "    \`stow .local nvim tmux zsh\` disabled"
-    # stow -d $DEV_ENV/env \
-        #     -t $XDG_CONFIG_HOME \
-        #     .local \
-        #     nvim \
-        #     tmux \
-        #     zsh
+    echo "\$\$\$"
+    # log "    \`stow .local nvim tmux zsh\` disabled"
+    stow -v -d $DEV_ENV/env \
+            -t $XDG_CONFIG_HOME \
+            .local \
+            .config \
+            nvim \
+            tmux \
+            zsh \
 else
-    log "    stow simulating [DRY_RUN]"
-    stow -nv \
+    echo "@@@"
+    stow -nvvv \
         -d $DEV_ENV/env \
         -t $XDG_CONFIG_HOME \
         .local \
+        .config \
         nvim \
         tmux \
-        zsh \
-        --ignore .git
+        zsh
 fi
 
 if [[ $dry_run == "0" ]]; then
-    log "  running ./run --real is disabled"
-    # ./run --real
+    # log "  running ./run --real is disabled"
+    ./run --real
 else
     ./run
 fi
