@@ -22,6 +22,21 @@ else
     fi
 fi
 
+log "Installing Go"
+if [[ $dry_run == "0" ]]; then
+    if ! hash go; then
+        bash <(curl -sL https://git.io/go-installer)
+    else
+        log "Go already installed"
+    fi
+else
+    if ! hash go; then
+        log "bash <(curl -sL https://git.io/go-installer)"
+    else
+        log "Go already installed"
+    fi
+fi
+        
 # Node Version Manager
 log "Installing Node Version Manager"
 if [[ $dry_run == "0" ]]; then

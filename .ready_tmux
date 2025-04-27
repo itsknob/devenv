@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# new window
+tmux neww -n "Opened devenv local .ready_tmux"
+
+# When you enter a new directory
+# Create a file as a flag
+

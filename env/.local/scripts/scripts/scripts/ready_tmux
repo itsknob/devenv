@@ -2,11 +2,9 @@
 
 # If there's an executable in the current dir, run it
 if [[ -x ".ready_tmux" ]]; then
-    echo "Using local .ready_tmux"
     ./.ready_tmux
 # Else run the one in the home directory
-else 
-    echo "Using global .ready_tmux"
+elif [[ -x "~/.ready_tmux" ]]; then
     ~/.ready_tmux
 fi
 clear
