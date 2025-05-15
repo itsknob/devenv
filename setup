@@ -48,6 +48,16 @@ else
     log "Copying dev-env, run, and setup scripts to ~/personal"
 fi
 
+# create $HOME/personal/scripts and add it to the path
+echo "Setting up $HOME/personal/scripts"
+if [[ $dry_run == "0" ]]; then
+    mkdir $HOME/personal/scripts
+    export PATH="$PATH:$HOME/personal/scripts"
+else
+    log "mkdir $HOME/personal/scripts"
+    log "export PATH=\"$PATH:$HOME/personal/scripts\""
+fi
+
 ## Ensure Stow is installed?
 log "Stow"
 log "  Checking for stow"
@@ -68,13 +78,13 @@ if [[ $dry_run == "0" ]]; then
     echo "\$\$\$"
     # log "    \`stow .local nvim tmux zsh\` disabled"
     stow -v -d $DEV_ENV/env \
-            -t $XDG_CONFIG_HOME \
-            .local \
-            .config \
-            nvim \
-            tmux \
-            zsh \
-else
+        -t $XDG_CONFIG_HOME \
+        .local \
+        .config \
+        nvim \
+        tmux \
+        zsh \
+    else
     echo "@@@"
     stow -nvvv \
         -d $DEV_ENV/env \

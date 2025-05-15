@@ -12,7 +12,6 @@ log "///////////"
 # - jq
 
 # Fuzzy Finder - FZF
-log "Updating Apt"
 log "Installing CLI Tools"
 if [[ $dry_run == "0" ]]; then
     sudo apt -y update

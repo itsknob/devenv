@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
+# 1 is DRY 0 is WET
+dry_run=${dry_run:-"1"}
+
 log "////////////////"
 log "//// langs"
 log "///////////"
-
-# 1 is DRY 0 is WET
-dry_run=${dry_run:-"1"}
 
 # Rust
 log "Installing Rustup"
@@ -36,7 +36,7 @@ else
         log "Go already installed"
     fi
 fi
-        
+
 # Node Version Manager
 log "Installing Node Version Manager"
 if [[ $dry_run == "0" ]]; then
