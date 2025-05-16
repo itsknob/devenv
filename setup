@@ -83,8 +83,8 @@ if [[ $dry_run == "0" ]]; then
         .config \
         nvim \
         tmux \
-        zsh \
-    else
+        zsh
+else
     echo "@@@"
     stow -nvvv \
         -d $DEV_ENV/env \
