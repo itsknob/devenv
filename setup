@@ -17,7 +17,7 @@ fi
 # no trailing slash
 if [ -z "$DEV_ENV" ]; then
     echo "env var DEV_ENV needs to be present"
-    echo "export DEV_ENV=<path/to/source/dir (from directory)"
+    echo "export DEV_ENV=path/to/source/dir \(from directory\)"
     exit 1
 fi
 
@@ -58,6 +58,27 @@ else
     log "export PATH=\"$PATH:$HOME/personal/scripts\""
 fi
 
+## If Mac Install Brew
+if ! hash brew; then
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		if [[ $dry_run == "0" ]]; then
+			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		else
+			log "/bin/bash -c \"$\(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.s\)\""
+		fi
+	fi
+else
+	log "  Found Brew"
+fi
+
+## Run Runs
+echo "Executing Run Script"
+if [[ $dry_run == "0" ]]; then
+    ./run --real
+else
+    ./run
+fi
+
 ## Ensure Stow is installed?
 log "Stow"
 log "  Checking for stow"
@@ -65,41 +86,39 @@ if ! hash stow; then
     log "    stow not found - installing"
 
     if [[ $dry_run == "0" ]]; then
-        sudo apt install stow -y
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		brew install stow
+	else
+		sudo apt install stow -y
+	fi
     else
         log "  sudo apt install stow -y"
     fi
 else
     log "  Found stow"
 fi
+
+## Pull nvimrc into env/nvim/.vimrc
 ## Should we run stow in here?
 log "  Running stow"
 if [[ $dry_run == "0" ]]; then
     echo "\$\$\$"
-    # log "    \`stow .local nvim tmux zsh\` disabled"
+    # log "    \"stow .local nvim tmux zsh\" disabled"
     stow -v -d $DEV_ENV/env \
         -t $XDG_CONFIG_HOME \
-        .local \
+	--adopt \
+	tmux \
+        zsh \
         .config \
-        nvim \
-        tmux \
-        zsh
+        # .local \
 else
     echo "@@@"
     stow -nvvv \
         -d $DEV_ENV/env \
         -t $XDG_CONFIG_HOME \
-        .local \
+	--adopt \
+	zsh \
+    	tmuxa \
         .config \
-        nvim \
-        tmux \
-        zsh
+        # .local \
 fi
-
-if [[ $dry_run == "0" ]]; then
-    # log "  running ./run --real is disabled"
-    ./run --real
-else
-    ./run
-fi
-

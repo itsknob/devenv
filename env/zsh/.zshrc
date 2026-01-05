@@ -1,5 +1,5 @@
 # Variables
-user='stephen.reilly'
+user=$USER
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -12,65 +12,12 @@ export ZSH="/Users/$user/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="agnoster"
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git aws shrink-path)
+plugins=(z git aws shrink-path)
 
 # fzf plugin, must be exported before oh-my-zsh is sourced
 export FZF_BASE=/opt/homebrew/bin/fzf
@@ -110,6 +57,7 @@ alias ohmyzsh="vim ~/.oh-my-zsh"
 # eval "dircolors ~/.dircolors/dircolors"
 alias ls="eza"
 alias la="ls -laF"
+alias lt="ls -la --tree --level=2"
 alias cat="bat"
 alias vim="nvim"
 
@@ -290,17 +238,17 @@ prompt_dir() {
 
 prompt_context() {
   local name=$(echo knob)
-  read card1_value card1_suit < <(get_card)
-  read card2_value card2_suit < <(get_card)
-  local card1=$(get_card_symbol $((card1_value)) $((card1_suit)))
-  local card2=$(get_card_symbol $((card2_value)) $((card2_suit)))
+  # read card1_value card1_suit < <(get_card)
+  # read card2_value card2_suit < <(get_card)
+  # local card1=$(get_card_symbol $((card1_value)) $((card1_suit)))
+  # local card2=$(get_card_symbol $((card2_value)) $((card2_suit)))
 
   prompt_segment yellow $CURRENT_FG '%K{yellow}knob '
-  prompt_segment red $CURRENT_FG $card1
-  prompt_segment red $CURRENT_FG $card2
-  if [[ 21 -eq $((card1_value + card2_value)) ]] then
-    prompt_segment green $CURRENT_FG "🎉 Black Jack! 🎉"
-  fi
+  # prompt_segment red $CURRENT_FG $card1
+  # prompt_segment red $CURRENT_FG $card2
+  # if [[ 21 -eq $((card1_value + card2_value)) ]] then
+  #   prompt_segment green $CURRENT_FG "🎉 Black Jack! 🎉"
+  # fi
 }
 
 #
@@ -333,11 +281,6 @@ prompt_context() {
 # }
 #
 # zle -N zle-line-init
-
-rpg () {
-    rpg-cli "$@"
-    cd "$(rpg-cli pwd)"
-}
 
 # alias awscreds="stskeygen -a b2bcore"
 awscreds() {
@@ -391,12 +334,18 @@ export PATH="/Users/stephen.reilly/.rd/bin:$PATH"
 export FZF_BASE=/opt/homebrew/bin/fzf
 source <(fzf --zsh)
 
-# z for cd
-eval "$(zoxide init zsh)"
-
 # Created by `pipx` on 2024-12-10 15:33:38
 export PATH="$PATH:/Users/stephen.reilly/.local/bin"
 
 # Set NVIM to default editor for zsh
 export EDITOR=nvim
 export VISUAL="$EDITOR"
+
+## Completions
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export GOROOT=/Users/knob/.go
+export GOPATH=/Users/knob/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(mise activate zsh)"
+eval "$(zoxide init zsh)" # z for cd

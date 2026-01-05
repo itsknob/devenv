@@ -42,7 +42,11 @@ log "//// runs"
 log "///////////"
 
 # Find executable files in the runs directory
-runs_dir=`find $script_dir/runs -mindepth 1 -maxdepth 1 -executable`
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	runs_dir=`find $script_dir/runs -mindepth 1 -maxdepth 1 -perm +0111 -type f`
+else
+	runs_dir=`find $script_dir/runs -mindepth 1 -maxdepth 1 -executable`
+fi
 log "Found installer files for: "
 for dir in $runs_dir; do
     log "  $(basename $dir)"

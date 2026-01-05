@@ -11,7 +11,11 @@ log "///////////"
 if [[ $dry_run == "0" ]]; then
     # Install zsh
     log "Installing zsh"
-    sudo apt install zsh
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        brew install zsh
+    else
+        sudo apt install zsh
+    fi
 
     # Set as default shell
     log "Setting as default shell"
@@ -19,11 +23,15 @@ if [[ $dry_run == "0" ]]; then
 
     # Install Oh-My-Zsh
     log "Installing oh-my-zsh"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    ZSH=$ZSH sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 else
     log "Installing zsh"
-    log "  sudo apt install zsh"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        log "  brew install zsh"
+    else
+        log "  sudo apt install zsh"
+    fi
     log "Setting as default shell"
     log "  sudo chsh -s $(which zsh)"
     log "Installing oh-my-zsh"
