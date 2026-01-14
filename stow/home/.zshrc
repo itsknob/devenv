@@ -20,8 +20,10 @@ ZSH_THEME="agnoster"
 plugins=(z git aws shrink-path)
 
 # fzf plugin, must be exported before oh-my-zsh is sourced
-export FZF_BASE=/opt/homebrew/bin/fzf
+# export FZF_BASE=/opt/homebrew/bin/fzf
+export FZF_BASE="/Users/$user/personal/fzf/bin/fzf"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+source <($FZF_BASE --zsh)
 
 source $ZSH/oh-my-zsh.sh
 # source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
@@ -284,37 +286,29 @@ prompt_context() {
 
 # alias awscreds="stskeygen -a b2bcore"
 awscreds() {
-   while getopts ":a:p:" flag
+   cmd="stskeygen "
+
+   while getopts "a: r: p: A" flag
    do
-       case "${flag}" in
-           a) account=${OPTARG:"b2bcore"}; echo "account" "$account";;
-           p) profile=${OPTARG:"default"}; echo "profile" "$profile";;
-           \?)
-               echo "Invalid Option"
-               exit;;
+       case $flag in
+           a) cmd+="-a $OPTARG ";;
+           r) cmd+="-r $OPTARG ";;
+           p) cmd+="-p $OPTARG "; export AWS_PROFILE=$OPTARG;;
+           A) cmd+="--admin ";;
+           ?) echo "invalid arg $flag";;
        esac
    done
 
-   echo "account" "$account" "profile" "$profile"
-
-   if [ -z "$profile" ]; then
-       stskeygen -a "$account" --duration 21600
-   elif [ -z "$profile" ] && [ -z "$account" ]; then
-       stskeygen -a b2bcore -p b2bcore --duration 21600
-   else
-       stskeygen -a "$account" -p "$profile" --duration 21600
-   fi
-#  awk '/aws_/{print "export "toupper($1)"="$3}' ~/.aws/credentials | cat >> awscreds.tmp 
-#  source awscreds.tmp
-#  rm awscreds.tmp
-#  echo "Updated Env Variables with Credentials"
-   export AWS_PROFILE="$profile"
+   cmd+="--duration 43200 " # 12h
+   echo $cmd
+   eval " $cmd"
 }
+
 alias b2b="awscreds -a b2bcore"
+alias om="awscreds -a commerce-order-management -r aws-commerce-order-management -A"
+alias setaws="cp ~/.aws/credentials ~/.aws/credentials.toml; awk '{print toupper($1) $2 $3}' ~/.aws/credentials.toml | grep \[DEFAULT\] -A 6 | grep AWS_ | sed -e 's/\(AWS.*\)=\(.*\)/export \1=\2/' > aws.env | source aws.env | rm aws.env"
 
 export NODE_PATH=/Users/stephen.reilly/.nvm/versions/node/v14.18.1/bin/node
-
-
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/stephen.reilly/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/stephen.reilly/Downloads/google-cloud-sdk/path.zsh.inc'; fi
@@ -331,8 +325,8 @@ export PATH="/Users/stephen.reilly/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 # FZF
-export FZF_BASE=/opt/homebrew/bin/fzf
-source <(fzf --zsh)
+# export FZF_BASE=/opt/homebrew/bin/fzf
+# source <(fzf --zsh)
 
 # Created by `pipx` on 2024-12-10 15:33:38
 export PATH="$PATH:/Users/stephen.reilly/.local/bin"
@@ -349,3 +343,12 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 eval "$(mise activate zsh)"
 eval "$(zoxide init zsh)" # z for cd
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/knob/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# Ensure SSH Keys are loading in keychain
+ssh-add --apple-load-keychain -q
+
+

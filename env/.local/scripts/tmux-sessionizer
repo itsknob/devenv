@@ -30,5 +30,5 @@ tmux new-session -ds $selected_name -c $selected
 # and switch to it
 switch_to
 # and run our ready_tmux script
-tmux send-keys -t $selected_name "ready_tmux" 
+tmux send-keys -t $selected_name "~/personal/devenv/env/.local/scripts/ready_tmux"
 

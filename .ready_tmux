@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
 # new window
-tmux neww -n "Opened devenv local .ready_tmux"
+# tmux neww -n "Opened devenv local .ready_tmux"
 
 # When you enter a new directory
+# Open Nvim and Create another terminal
 # Create a file as a flag
-
+tmux send-keys "nvim ."
+tmux neww -d -a -n "zsh" # open 2nd window after nvim, but don't focus it
+tmux display "Ready"
